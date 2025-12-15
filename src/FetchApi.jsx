@@ -52,7 +52,7 @@ export default function FetchApi() {
       {loading ? (
         <p className="text-2xl text-center mt-14 font-bold flex flex-col justify-center items-center">
           Loading...
-          <img className="w-25 h-25" src="../kOnzy.gif" alt="" />
+          <img className="w-25 h-25" src="../src/KOnzy.gif" alt="" />
         </p>
       ) : error ? (
         <p className="text-red-500 mt-14 text-center font-bold text-2xl">
