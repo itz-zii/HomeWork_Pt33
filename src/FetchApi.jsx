@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import { instance } from "./utils/axios.js";
-
 export default function FetchApi() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [post, setPost] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [searchBar, setSearchBar] = useState("");
-
   useEffect(() => {
     const getPosts = async () => {
       try {
@@ -22,28 +19,15 @@ export default function FetchApi() {
     };
     getPosts();
   }, []);
-
   const handleDetail = async (id) => {
     setShowModal(true);
     const response = await instance.get(`/posts/${id}`);
     setPost(response.data);
   };
-
   const handleCloseModal = () => {
     setShowModal(false);
     setPost(null);
   };
-
-  const handleSearchChange = (event) => {
-    setSearchBar(event.target.value);
-  };
-
-  const filteredPosts = posts.filter(
-    (post) =>
-      post.title.toLowerCase().includes(searchBar.toLowerCase()) ||
-      post.body.toLowerCase().includes(searchBar.toLowerCase())
-  );
-
   return (
     <div className="container mx-auto p-8">
       <h1 className="text-3xl font-bold items-center text-center">Blogs</h1>
@@ -52,8 +36,6 @@ export default function FetchApi() {
           type="text"
           placeholder="Search..."
           className="border border-gray-400 rounded-md p-2 outline-none w-full"
-          value={searchBar}
-          onChange={handleSearchChange}
         />
       </form>
       <button className=" border border-gray-400 rounded-md px-4 py-2 mt-4 hover:bg-green-700 hover:text-white transition-colors cursor-pointer">
@@ -78,11 +60,15 @@ export default function FetchApi() {
         </p>
       ) : (
         <div>
-          {!filteredPosts.length ? (
-            <p className="text-center">Không có kết quả tìm kiếm nào.</p>
+          {!posts ? (
+            loading ? (
+              <p>Loading...</p>
+            ) : (
+              <p>{error}</p>
+            )
           ) : (
             <>
-              {filteredPosts.map((post) => (
+              {posts.map((post) => (
                 <div
                   key={post.id}
                   className="mt-4 border p-4 rounded border-gray-400"
